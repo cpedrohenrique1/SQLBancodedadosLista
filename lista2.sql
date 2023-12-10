@@ -36,6 +36,8 @@ WHERE salario > 3000;
 
 -- 8
 SELECT em.nome, em.salario FROM Empregado AS em
-WHERE em.dept = 1;
+LEFT JOIN Departamento AS de ON em.dept = de.numero
+WHERE de.nome LIKE '%Ensino%';
 
 -- 9
+SELECT 
