@@ -89,31 +89,22 @@ SELECT
 FROM
     Empregado AS em
 WHERE
-    em.dept = 5
-    AND NOT EXISTS (
-        SELECT
-            p.numero
-        FROM
-            Projeto AS p
-        WHERE
-            NOT EXISTS (
-                SELECT
-                    tp.projeto
-                FROM
-                    Trabalha_Para AS tp
-                WHERE
-                    tp.empregado = em.cpf
-                    AND tp.projeto = p.numero
-            )
-    );
+    em.dept = 5;
 
 -- 11 Mostre os nomes dos empregados supervisionados por Carlos Pedrosa
 SELECT
     em.nome
 FROM
     Empregado AS em
-WHERE
-    em.cpf_supervisor = 333333;
+WHERE EXISTS (
+    SELECT
+        *
+    FROM
+        Empregado AS em2
+    WHERE
+        em2.cpf = em.cpf_supervisor
+        AND em2.nome = 'Carlos Pedrosa'
+);
 
 -- 12 Liste os nomes dos empregados que não trabalham em qualquer projeto
 SELECT

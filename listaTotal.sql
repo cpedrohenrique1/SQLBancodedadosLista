@@ -39,7 +39,7 @@ CREATE TABLE
     Trabalha_Para (
         empregado int NOT NULL,
         projeto int NOT NULL,
-        horas TIME,
+        horas int,
         PRIMARY KEY (empregado, projeto),
         FOREIGN KEY (empregado) REFERENCES Empregado (cpf),
         FOREIGN KEY (projeto) REFERENCES Projeto (numero)
@@ -240,7 +240,7 @@ FROM
     Empregado AS em
     LEFT JOIN Departamento AS de ON em.dept = de.numero
 WHERE
-    de.nome LIKE '%Ensino%';
+    de.nome LIKE 'Ensino';
 
 -- 9 Mostre os nomes dos empregados que trabalham no projeto número 1
 SELECT
@@ -257,31 +257,22 @@ SELECT
 FROM
     Empregado AS em
 WHERE
-    em.dept = 5
-    AND NOT EXISTS (
-        SELECT
-            p.numero
-        FROM
-            Projeto AS p
-        WHERE
-            NOT EXISTS (
-                SELECT
-                    tp.projeto
-                FROM
-                    Trabalha_Para AS tp
-                WHERE
-                    tp.empregado = em.cpf
-                    AND tp.projeto = p.numero
-            )
-    );
+    em.dept = 5;
 
 -- 11 Mostre os nomes dos empregados supervisionados por Carlos Pedrosa
 SELECT
     em.nome
 FROM
     Empregado AS em
-WHERE
-    em.cpf_supervisor = 333333;
+WHERE EXISTS (
+    SELECT
+        *
+    FROM
+        Empregado AS em2
+    WHERE
+        em2.cpf = em.cpf_supervisor
+        AND em2.nome = 'Carlos Pedrosa'
+);
 
 -- 12 Liste os nomes dos empregados que não trabalham em qualquer projeto
 SELECT
