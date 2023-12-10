@@ -36,3 +36,6 @@ WHERE salario > 3000;
 
 -- 8
 SELECT em.nome, em.salario FROM Empregado AS em
+WHERE em.dept = 1;
+
+-- 9
