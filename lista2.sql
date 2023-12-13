@@ -29,7 +29,7 @@ SELECT
     em.nome
 FROM
     Empregado AS em
-    LEFT JOIN Departamento AS de ON de.numero = em.dept
+    LEFT JOIN Departamento AS de ON em.dept = de.numero
 WHERE
     de.numero = 1
     AND em.cpf = de.cpf_gerente;
@@ -42,12 +42,15 @@ FROM
 
 -- 6 Mostre os CPFs dos que não são gerentes
 SELECT
-    em.cpf
+    cpf
 FROM
-    Empregado AS em
-    LEFT JOIN Departamento as de ON em.cpf = de.cpf_gerente
-WHERE
-    de.cpf_gerente IS NULL;
+    Empregado
+WHERE cpf NOT IN(
+    SELECT
+        cpf_gerente
+    FROM
+        Departamento
+);
 
 -- 7 Liste os CPFs dos funcionários que são gerentes ou que ganham acima de 3000
 SELECT
@@ -70,16 +73,22 @@ SELECT
     em.salario
 FROM
     Empregado AS em
-    LEFT JOIN Departamento AS de ON em.dept = de.numero
+LEFT JOIN
+    Departamento AS de
+ON
+    em.dept = de.numero
 WHERE
-    de.nome LIKE '%Ensino%';
+    de.numero = 1;
 
 -- 9 Mostre os nomes dos empregados que trabalham no projeto número 1
 SELECT
     em.nome
 FROM
     Empregado AS em
-    LEFT JOIN Trabalha_Para AS tp ON em.cpf = tp.empregado
+LEFT JOIN
+    Trabalha_Para AS tp
+ON
+    em.cpf = tp.empregado
 WHERE
     tp.projeto = 1;
 
@@ -96,14 +105,14 @@ SELECT
     em.nome
 FROM
     Empregado AS em
-WHERE EXISTS (
-    SELECT
-        *
+WHERE EXISTS(
+    SELECT *
     FROM
-        Empregado AS em2
+        Empregado
     WHERE
-        em2.cpf = em.cpf_supervisor
-        AND em2.nome = 'Carlos Pedrosa'
+        cpf = em.cpf_supervisor
+    AND
+        cpf = 333333
 );
 
 -- 12 Liste os nomes dos empregados que não trabalham em qualquer projeto
@@ -122,11 +131,19 @@ WHERE
     );
 
 -- 13 Mostre CPFs dos que trabalham em pelo menos um projeto
-SELECT DISTINCT
+SELECT
     em.nome
 FROM
     Empregado AS em
-    LEFT JOIN Trabalha_Para AS tp ON em.cpf = tp.empregado;
+WHERE
+    cpf
+IN
+    (
+        SELECT
+            empregado
+        FROM
+            Trabalha_Para
+    );
 
 -- 14 Mostre os CPFs dos empregados que gerenciam algum departamento ou que não participam de qualquer projeto
 SELECT
