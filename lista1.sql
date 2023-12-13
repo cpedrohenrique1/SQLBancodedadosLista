@@ -38,7 +38,7 @@ CREATE TABLE
     Trabalha_Para (
         empregado int NOT NULL,
         projeto int NOT NULL,
-        horas TIME,
+        horas int,
         PRIMARY KEY (empregado, projeto),
         FOREIGN KEY (empregado) REFERENCES Empregado (cpf),
         FOREIGN KEY (projeto) REFERENCES Projeto (numero)
